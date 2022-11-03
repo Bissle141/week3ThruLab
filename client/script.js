@@ -142,6 +142,7 @@ let queryFunc = () => {
 
 document.querySelector('#query-button').addEventListener('click', queryFunc)
 
+
 ////////////////
 //INTERMEDIATE//
 ////////////////
