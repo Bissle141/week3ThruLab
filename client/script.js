@@ -12,6 +12,7 @@
 // CODE HERE
 let sayHelloBtn = document.querySelector('#say-hello-button')
 let repeatBtn = document.querySelector('#repeat-button')
+let hostURL = 'http://localhost:3000/'
 
 // PROBLEM 2
 /*
@@ -55,7 +56,7 @@ sayHelloBtn.addEventListener('mouseout', changeBackBackground)
 
 // DO NOT EDIT FUNCTION
 const sayHello = () => {
-    axios.get('http://localhost:3000/say-hello').then((res) => {
+    axios.get(`${hostURL}say-hello`).then((res) => {
         let helloText = document.getElementById('hello-text');
         helloText.style.display = 'block';
         helloText.style.backgroundColor = 'green';
@@ -78,9 +79,18 @@ sayHelloBtn.addEventListener('click', sayHello)
     Handle the promise that's returned with a .then, which you should pass a callback function to. Inside the callback function, console.log the response's data (in the intermediate instructions we'll come back to this function and add HTML).
 */ 
 
+// Back in the ohMy function on Problem 5, replace the console log in the promise's callback with a for loop that loops over res.data. 
+
+// On each iteration of the loop, create a new p element. Set its textContent equal the string at the current index (i) and then append the new p element onto the document's body. 
+
 const ohMy = () => {
-    axios.get('http://localhost:3000/animals')
-        .then((res, callback = () => {console.log(res.data)} ) => callback())
+    axios.get(`${hostURL}animals`)
+        .then((res, callback = () => {
+            for (let index = 0; index < res.data.length; index++) {
+                document.body.append(document.createElement('p').textContent = res.data[index])
+                // console.log(res.data[index]) // for testing
+            }
+        } ) =>  callback())
 }
 
 document.getElementById('animals-button').addEventListener('click', ohMy)
@@ -100,7 +110,7 @@ document.getElementById('animals-button').addEventListener('click', ohMy)
 */
 
 const repeatMyParam = () => {
-    axios.get('http://localhost:3000/repeat/String')
+    axios.get(`${hostURL}repeat/String`)
         .then(( res, callback = () => console.log(res.data)) => {
             callback()
 
@@ -137,7 +147,7 @@ repeatBtn.addEventListener('click', repeatMyParam)
 // CODE HERE
 
 let queryFunc = () => {
-    axios.get('http://localhost:3000/query-test/?name=henry&age=34').then(res => console.log(res.data))
+    axios.get(`${hostURL}query-test/?name=ryan&age13`).then(res => console.log(res.data))
 }
 
 document.querySelector('#query-button').addEventListener('click', queryFunc)
@@ -161,8 +171,10 @@ document.querySelector('#query-button').addEventListener('click', queryFunc)
     In the function that you wrote for Problem 8, change the URL to test a couple different scenarios. 
 
     1: Send no queries on the URL -- what happened? 
+    It returned a message saying "You sent an empty query!"
 
     2: Send more than 1 query on the URL -- what happened? 
+    It returned "You sent more than 1 query!" and returned my queries
 */
 
 // Edit code in Problem 8
@@ -193,3 +205,21 @@ document.querySelector('#query-button').addEventListener('click', queryFunc)
 */
 
 // CODE HERE 
+const addFoodBtn = document.querySelector('#add-food-button')
+
+const createFood = () => {
+    const foodInput = document.querySelector('#food-input')
+    
+    let body = {
+        newFood: foodInput.value,
+    }
+    
+    axios.post(`${hostURL}food`, body)
+        .then((res, callback = () => {
+            document.body.append(res.data)
+        }) => callback()
+    )
+
+}
+
+addFoodBtn.addEventListener('click', createFood)
